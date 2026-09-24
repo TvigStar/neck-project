@@ -1,0 +1,32 @@
+name: PostureApp
+options:
+  bundleIdPrefix: dev.kolesnyk
+  deploymentTarget:
+    iOS: "17.0"
+packages:
+  PostureCore:
+    path: PostureCore
+targets:
+  PostureApp:
+    type: application
+    platform: iOS
+    sources: [App/Sources]
+    scheme: {}
+    dependencies:
+      - package: PostureCore
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: Posture
+        CFBundleShortVersionString: "0.1.0"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        NSMotionUsageDescription: "Posture uses your AirPods head tracking to remind you to keep a good posture."
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.kolesnyk.posture
+        CURRENT_PROJECT_VERSION: "1"
+        SWIFT_VERSION: "5.10"
+        TARGETED_DEVICE_FAMILY: "1"
+        GENERATE_INFOPLIST_FILE: NO

@@ -1,0 +1,48 @@
+name: Build iOS
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test PostureCore
+        run: swift test --package-path PostureCore
+
+      - name: Generate Xcode project
+        run: |
+          brew install xcodegen
+          xcodegen generate
+
+      - name: Build unsigned app
+        run: |
+          xcodebuild build \
+            -project PostureApp.xcodeproj \
+            -scheme PostureApp \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build \
+            CURRENT_PROJECT_VERSION=${{ github.run_number }} \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY=""
+
+      - name: Package .ipa
+        run: |
+          mkdir -p Payload
+          cp -R build/Build/Products/Release-iphoneos/PostureApp.app Payload/
+          zip -qr PostureApp.ipa Payload
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PostureApp-${{ github.run_number }}
+          path: PostureApp.ipa
+          retention-days: 14
