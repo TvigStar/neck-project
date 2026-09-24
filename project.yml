@@ -22,6 +22,9 @@ targets:
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
         UILaunchScreen: {}
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        UIBackgroundModes: [audio]
+        UIFileSharingEnabled: true
+        LSSupportsOpeningDocumentsInPlace: true
         NSMotionUsageDescription: "Posture uses your AirPods head tracking to remind you to keep a good posture."
     settings:
       base:
